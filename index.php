@@ -1,31 +1,40 @@
 <?php
-echo "While Loop: ";
-$x = 0;
-while($x<11){
-    echo $x;
-    $x++;
-}
-echo "<br>","Do... While Loop: ";
-do {
-    $a = (int)readline("Enter a number greater than 0: ");
-}while ($a<0);
-echo "<br>","For Loop: ";
-$c = 5;
-for($b=1;$b<11;$b++){
-    echo "<br>",$c*$b;
-}
-echo "<br>","ForEach Loop: ";
-$details = array("Michael",20,85);
-foreach($details as $detail){
-    echo "<br>",$detail;
-}
-echo "<br>","For Loop w/ Break: ";
-$c = 5;
-for($b=1;$b<11;$b++){
-    echo "<br>",$c*$b;
-    if($c*$b%7==0){
-        break;
-    }
-}
-echo " is divisible by 7";
+include 'db.php';
+
+$sql = "SELECT * FROM contacts"; 
+$result = $conn->query($sql);
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phonebook</title>
+</head>
+<body>
+    <h2>Phonebook</h2>
+
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Action</th>
+        </tr>
+        <?php
+
+        if ($result->num_rows > 0) { 
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . $row['name'] . "</td>";
+                echo "<td>" . $row['phone'] . "</td>";
+                echo "<td><a href='delete.php?id=" . $row['id'] . "'>Delete</a></td>";
+                echo "<td><a href='edit.php?id=" . $row['id'] . "'>Edit</a></td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='3'>No Contacts</td></tr>";
+        }
+        ?>
+    </table>
+</body>
+</html>
